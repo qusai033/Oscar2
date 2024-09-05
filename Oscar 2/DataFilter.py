@@ -18,7 +18,7 @@ def extract_patient_info_from_footer(asc_data):
     return patient_name, patient_id
 
 
-# Function to count non-missing values in a row
+#count non-missing values in a row
 def count_non_missing(row): # Count the number of fields that are not '--' or NaN
     return sum((x != '--' and pd.notna(x)) for x in row)
 
@@ -36,7 +36,7 @@ def process_asc_file_with_all_indices(asc_data):
             line_data = line.strip().split('\t')
             if len(line_data) >= 23 and line_data[0].isdigit():  # Ensure the index is numeric
                 index = int(line_data[0])
-                # Fill missing indices between the last index and the current one
+                
                 for missing_index in range(last_index + 1, index):
                     processed_data.append({
                         'Index': str(missing_index),
@@ -88,24 +88,23 @@ def process_asc_file_with_all_indices(asc_data):
 
     return cleaned_df
 
-# Function to process all ASC files in a directory
+#process all ASC files in a directory
 def process_all_asc_files_in_folder(folder_path):
     # Loop through all .asc files in the folder
     for filename in os.listdir(folder_path):
         if filename.endswith(".asc"):
             file_path = os.path.join(folder_path, filename)
             print(f"Processing file: {file_path}")
-            # Load the ASC file
+    
             with open(file_path, 'r') as file:
                 asc_data = file.readlines()
-            # Process the ASC file
+            
             processed_data = process_asc_file_with_all_indices(asc_data)
-            # Save the processed data to a CSV file
             output_csv_file = file_path.replace('.asc', '_processed.csv')
             processed_data.to_csv(output_csv_file, index=False)
             print(f"Saved processed data to {output_csv_file}")
-# Example usage
-folder_path = 'C:/Users/q1n/Documents/Oscar 2'  # Replace with the actual folder path
+
+folder_path = 'C:/Users/q1n/Documents/Oscar 2'
 process_all_asc_files_in_folder(folder_path)
 
 
